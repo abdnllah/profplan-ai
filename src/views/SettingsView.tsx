@@ -15,6 +15,7 @@ import {
   Unlock,
   Layers,
   RotateCcw,
+  KeyRound,
 } from 'lucide-react';
 import { Card } from '../components/common/Card';
 import { Badge } from '../components/common/Badge';
@@ -22,6 +23,7 @@ import { Button } from '../components/common/Button';
 import { db, requestPersistentStorage } from '../db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { TutorSettings } from '../types';
+import { hashPassword } from '../components/auth/LoginView';
 import {
   requestGoogleDriveAuth,
   performDriveSync,
@@ -66,6 +68,30 @@ export const SettingsView: React.FC = () => {
     } as TutorSettings);
     setSaveStatus('Paramètres enregistrés avec succès !');
     setTimeout(() => setSaveStatus(''), 3000);
+  };
+
+  const handleChangePassword = async () => {
+    const currentPass = prompt('Entrez votre mot de passe actuel :');
+    if (!currentPass) return;
+    const currentHash = await hashPassword(currentPass);
+    const savedHash = localStorage.getItem('profplan_master_hash');
+    if (savedHash && currentHash !== savedHash) {
+      alert('Mot de passe actuel incorrect.');
+      return;
+    }
+    const newPass = prompt('Entrez votre nouveau mot de passe (au moins 4 caractères) :');
+    if (!newPass || newPass.length < 4) {
+      alert('Le nouveau mot de passe doit comporter au moins 4 caractères.');
+      return;
+    }
+    const confirmPass = prompt('Confirmez le nouveau mot de passe :');
+    if (newPass !== confirmPass) {
+      alert('Les mots de passe ne correspondent pas.');
+      return;
+    }
+    const newHash = await hashPassword(newPass);
+    localStorage.setItem('profplan_master_hash', newHash);
+    alert('Mot de passe principal mis à jour avec succès !');
   };
 
   // Google Drive Connect
@@ -651,6 +677,28 @@ export const SettingsView: React.FC = () => {
                 />
               </div>
             )}
+
+            {/* Master Password Setting */}
+            <div className="pt-3 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="font-semibold text-foreground text-xs block">
+                  Mot de passe d'accès principal de l'application
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  Ce mot de passe verrouille l'entrée sur le site pour empêcher tout visiteur ou tiers d'accéder à vos dossiers.
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                type="button"
+                onClick={handleChangePassword}
+                icon={<KeyRound size={14} />}
+                className="shrink-0 text-xs"
+              >
+                Changer le mot de passe
+              </Button>
+            </div>
           </div>
         </Card>
 

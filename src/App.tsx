@@ -4,6 +4,7 @@ import { Header } from './components/layout/Header';
 import { PromptHelperModal } from './components/common/PromptHelperModal';
 import { ConflictModal } from './components/common/ConflictModal';
 import { ScreenLockModal } from './components/common/ScreenLockModal';
+import { LoginView } from './components/auth/LoginView';
 import { WeekView } from './views/WeekView';
 import { ScheduleView } from './views/ScheduleView';
 import { StudentsView } from './views/StudentsView';
@@ -48,6 +49,16 @@ export const App: React.FC = () => {
   const [isScreenLocked, setIsScreenLocked] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [activeConflict, setActiveConflict] = useState<RecordConflict | null>(null);
+
+  // Master Password Authentication Gate
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem('profplan_session_auth') === 'true';
+  });
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('profplan_session_auth');
+    setIsAuthenticated(false);
+  };
 
   // Initialize DB seed on start and set theme
   useEffect(() => {
@@ -154,6 +165,10 @@ export const App: React.FC = () => {
     },
   };
 
+  if (!isAuthenticated) {
+    return <LoginView onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="flex min-h-screen bg-background text-text-primary antialiased">
       {/* Sidebar Navigation */}
@@ -176,7 +191,7 @@ export const App: React.FC = () => {
           isSyncing={isSyncing}
           onOpenPromptHelper={() => handleOpenPromptHelper()}
           onNewLesson={() => handleOpenLesson()}
-          onLockScreen={settings?.screenLockEnabled ? () => setIsScreenLocked(true) : undefined}
+          onLockScreen={handleLogout}
         />
 
         <main className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
