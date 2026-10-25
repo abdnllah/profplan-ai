@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Pure Yellow accent & crisp clean light base */
+    --background: 0 0% 100%;       /* #ffffff */
+    --foreground: 240 10% 4%;      /* #09090b */
+    --card: 0 0% 100%;             /* #ffffff */
+    --card-foreground: 240 10% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 4%;
+    --primary: 48 96% 53%;         /* #FACC15 (Pure Warm Yellow) */
+    --primary-foreground: 0 0% 0%; /* #000000 */
+    --secondary: 240 5% 96%;       /* #f4f4f5 */
+    --secondary-foreground: 240 10% 4%;
+    --muted: 240 5% 96%;           /* #f4f4f5 */
+    --muted-foreground: 240 4% 46%;/* #71717a */
+    --accent: 48 96% 53%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84% 60%;      /* #ef4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;          /* #e4e4e7 */
+    --input: 240 6% 90%;
+    --ring: 48 96% 53%;
+    --radius: 1rem;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 240 10% 4%;
+    --sidebar-border: 240 6% 90%;
+    --chart-1: 48 96% 53%;
+    --chart-2: 240 5% 26%;
+    --chart-3: 142 71% 45%;
+    --chart-4: 240 4% 46%;
+    --chart-5: 240 5% 65%;
+  }
+
+  .dark {
+    /* PRD Section 5: Near-black #0A0A0B, layered neutral dark grays, and #FACC15 pure yellow accent (no blue) */
+    --background: 240 5% 4%;        /* #0A0A0B (Near-black) */
+    --foreground: 240 5% 96%;       /* #F4F4F5 (High contrast) */
+    --card: 240 5% 8%;              /* #141416 (Layered dark card) */
+    --card-foreground: 240 5% 96%;
+    --popover: 240 5% 8%;           /* #141416 */
+    --popover-foreground: 240 5% 96%;
+    --primary: 48 96% 53%;          /* #FACC15 (Pure Warm Yellow - sole accent) */
+    --primary-foreground: 0 0% 0%;  /* #000000 */
+    --secondary: 240 6% 15%;        /* #242428 */
+    --secondary-foreground: 240 5% 96%;
+    --muted: 240 5% 12%;            /* #1C1C1F */
+    --muted-foreground: 240 5% 65%; /* #A1A1AA */
+    --accent: 48 96% 53%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 72% 51%;       /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 17%;           /* #28282D */
+    --input: 240 6% 17%;
+    --ring: 48 96% 53%;
+    --radius: 1rem;
+    --sidebar: 240 5% 4%;           /* #0A0A0B */
+    --sidebar-foreground: 240 5% 96%;
+    --sidebar-border: 240 5% 13%;   /* #202024 */
+    --chart-1: 48 96% 53%;
+    --chart-2: 240 5% 40%;
+    --chart-3: 142 71% 45%;
+    --chart-4: 240 5% 60%;
+    --chart-5: 48 96% 53%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-black;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Touch targets >= 44px */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Subtle glow utility for primary accents */
+.glow-primary {
+  box-shadow: 0 0 20px -3px hsla(48, 96%, 53%, 0.25);
+}
+
+.glow-primary-sm {
+  box-shadow: 0 0 10px -2px hsla(48, 96%, 53%, 0.2);
+}
+
+/* Print Styles: Light background, crisp text, ink-friendly */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-page {
+    page-break-after: always;
+  }
+}
